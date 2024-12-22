@@ -89,7 +89,7 @@ class BaseAppLauncher(ABC):
         check_interval: str = "30s",
         check_timeout: str = "3s",
         consul_register_address: str = "http://localhost:8500/v1/agent/service/register",
-    ):
+    ) -> None:
         """
         Register the service in Consul with health check configurations.
 
@@ -124,7 +124,12 @@ class BaseAppLauncher(ABC):
             "ID": service_id,
             "Port": self.port,
             "Address": self.host,
-            "Check": {"http": http_, "interval": check_interval, "timeout": check_timeout},
+            "Check": {
+                "http": http_,
+                "interval": check_interval,
+                "timeout": check_timeout,
+                "status": "passing",
+            },
         }
         block = Block(
             text=[
@@ -139,7 +144,6 @@ class BaseAppLauncher(ABC):
         response = block()
         if response.status_code != 200:
             raise ConnectionError(response.text)
-        httpx.put(f"http://localhost:8500/v1/agent/check/pass/{service_id}")
 
     @abstractmethod
     def app_run(self) -> None:

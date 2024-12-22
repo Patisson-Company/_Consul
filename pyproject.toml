@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "patisson-applauncher"
-version = "1.2.2"
+version = "1.2.3"
 description = "a launcher for properly launching microservices"
 authors = ["EliseyGodX"]
 license = "MIT"
